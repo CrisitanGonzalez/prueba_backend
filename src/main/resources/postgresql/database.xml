@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl.prueba.mantenedor_backend.mapper.DataMapper">
+    <resultMap id="taskMap" type="cl.prueba.mantenedor_backend.model.Task">
+        <result column="id_tarea" property="id"/>
+        <result column="descripcion" property="description"/>
+        <result column="fecha" property="date"/>
+        <result column="vigente" property="enabled"/>
+    </resultMap>
+
+
+    <insert id="insertTask" parameterType="cl.prueba.mantenedor_backend.model.Task">
+        insert into tareas.tarea (
+        id_tarea,
+        descripcion,
+        fecha,
+        vigente
+        ) values (
+        nextval('tareas.identificador'),
+        #{description},
+        #{date},
+        #{enabled}
+        )
+
+    </insert>
+
+    <select id="listTask" resultMap="taskMap">
+        select id_tarea, descripcion, fecha, vigente
+        from tareas.tarea
+        where vigente = true order by id_tarea
+    </select>
+
+
+    <update id="updateTask" parameterType="cl.prueba.mantenedor_backend.model.Task">
+        update tareas.tarea set
+        descripcion = #{description},
+        fecha =  #{date},
+        vigente =  #{enabled}
+        where id_tarea = #{id}
+    </update>
+
+    <update id="deleteTask" parameterType="java.lang.Integer">
+        update tareas.tarea set
+        vigente =  false
+        where id_tarea = #{value}
+    </update>
+
+</mapper>
